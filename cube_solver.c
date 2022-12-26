@@ -5,11 +5,10 @@
 #include "cube_solver.h"
 
 static void _swap(char*, int, int);
-void solve_corner(char*);
-void solve_edge(char*);
 
 static const char *corner_LUT[][2] = 
 { 
+    // defines setup and "unfo" moves for shooting to a certain target
     [3] = { "R D'",     "D R'"  },
     [4] = { "R2",       "R2"    },
     [5] = { "R' F",     "F' R"  },
@@ -35,6 +34,8 @@ static const char *corner_LUT[][2] =
 
 static const int corner_swaps[][3] =
 {
+    // each entry denotes where each buffer sticker will end up.
+    // i.e if shooting to sticker 3, corners[0] goes to sticker 3, corners[1] goes to sticker 5, and corners[2] goes to sticker 4
     [3] = {3, 5, 4},
     [4] = {4, 3, 5},
     [5] = {5, 4, 3},
@@ -115,6 +116,7 @@ static const char solved_corner_definition[] = "WOBWRBWRGWOGYOGYRGYRBYOB";
 
 bool is_solved_corners()
 {
+    // checks if any sticker doesn't match a solved cube
     for (int i = 0; i < 24; i++)
     {
         if (corners[i] != solved_corner_definition[i])
@@ -127,6 +129,7 @@ bool is_solved_corners()
 
 bool is_solved_edges()
 {
+    // checks if any sticker doesn't match a solved cube
     for (int i = 0; i < 24; i++)
     {
         if (edges[i] != solved_edge_definition[i])
@@ -139,6 +142,7 @@ bool is_solved_edges()
 
 int find_target_corner()
 {
+    // loop through solved corner definition, use strchr() to see at what index the buffer piece belongs
     for (int solved_idx = 0; solved_idx < 24; solved_idx += 3)
     {
         char piece[3] = { solved_corner_definition[solved_idx], solved_corner_definition[solved_idx + 1], solved_corner_definition[solved_idx + 2] };
@@ -152,6 +156,7 @@ int find_target_corner()
 
 int find_target_edge()
 {
+    // loop through solved edge definition, use strchr() to see at what index the buffer piece belongs
     for (int solved_idx = 0; solved_idx < 24; solved_idx += 2)
     {
         char piece[2] = { solved_edge_definition[solved_idx], solved_edge_definition[solved_idx + 1] };
@@ -165,6 +170,7 @@ int find_target_edge()
 
 void update_corners(char* arr, int target) 
 {
+    // uses a table to swap each corner sticker to its new location
     for (int i = 0; i < 3; i++)
     {
         _swap(arr, i, corner_swaps[target][i]);
@@ -173,6 +179,7 @@ void update_corners(char* arr, int target)
 
 void update_edges(char* arr, int target) 
 {
+    // uses a table to swap each edge sticker to its new location
     for (int i = 0; i < 2; i++)
     {
         _swap(arr, i + 2, edge_swaps[target][i]);
@@ -192,9 +199,9 @@ void solve_cube(char* cornerstate, char* edgestate)
     }
     printf("\n");
 
+    // if did uneven number of swaps, two edges will have been switched 
     if (number_swaps % 2 != 0)
     {
-        // account for "parity"
         _swap(edges, 0, 6);
         _swap(edges, 1, 7);
     }
@@ -210,6 +217,8 @@ void solve_cube(char* cornerstate, char* edgestate)
 void solve_corner(char* cornerstate)
 {
     int target = find_target_corner();
+
+    // if buffer is shooting to buffer we need to start a new cycle (i.e. shoot to a new unsolved piece)
     if (target == 0 || target == 1|| target == 2)
     {
         for (int i = 3; i < 24; i++)
@@ -221,6 +230,8 @@ void solve_corner(char* cornerstate)
             }
         } 
     }
+
+    // update corners based on the desired swap 
     update_corners(cornerstate, target);
     printf("%s {y perm} %s\n", corner_LUT[target][0], corner_LUT[target][1]);
 }
@@ -228,6 +239,8 @@ void solve_corner(char* cornerstate)
 void solve_edge(char* edgestate)
 {
     int target = find_target_edge();
+
+    // if buffer is shooting to buffer we need to start a new cycle (i.e. shoot to a new unsolved piece)
     if (target == 2 || target == 3)
     {
         for (int i = 0; i < 24; i++)
@@ -239,6 +252,7 @@ void solve_edge(char* edgestate)
             }
         } 
     }
+    // update edges based on the desired swap 
     update_edges(edgestate, target);
     printf("%s {t perm} %s\n", edge_LUT[target][0], edge_LUT[target][1]);
 }

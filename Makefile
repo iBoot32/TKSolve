@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -std=c11 -Wall -Wshadow -Wvla -Werror -pedantic
+CFLAGS=-g -Wall -Wshadow -Wvla -Werror -pedantic
 CFLAGS_GCOV=$(CFLAGS) -fprofile-arcs -ftest-coverage
 BASE_NAME=cube_solver
 SRC_C=$(BASE_NAME).c
