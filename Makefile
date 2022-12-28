@@ -2,11 +2,11 @@ CC=gcc
 CFLAGS=-g -Wall -Wshadow -Wvla -Werror -pedantic
 CFLAGS_GCOV=$(CFLAGS) -fprofile-arcs -ftest-coverage
 BASE_NAME=cube_solver
-SRC_C=$(BASE_NAME).c
+SRC_C=$(BASE_NAME).c calc.c
 TEST_C=test_$(BASE_NAME).c
 EXECUTABLE=test_$(BASE_NAME)
 EXECUTABLE_GCOV=$(EXECUTABLE)_gcov
-SRC_H=$(BASE_NAME).h miniunit.h
+SRC_H=$(BASE_NAME).h miniunit.h calc.h
 SUBMIT_FILES=$(EXECUTABLE).c $(SRC_H) Makefile $(SRC_C)
 SHELL=/bin/bash
 

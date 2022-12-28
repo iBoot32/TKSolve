@@ -6,7 +6,7 @@
 
 static void _swap(char*, int, int);
 
-static const char *corner_LUT[][2] = 
+const char *corner_LUT[][2] = 
 { 
     // defines setup and "unfo" moves for shooting to a certain target
     [3] = { "R D'",     "D R'"  },
@@ -32,7 +32,7 @@ static const char *corner_LUT[][2] =
     [23] = { "D' R",    "R' D"  }
 };
 
-static const int corner_swaps[][3] =
+const int corner_swaps[][3] =
 {
     // each entry denotes where each buffer sticker will end up.
     // i.e if shooting to sticker 3, corners[0] goes to sticker 3, corners[1] goes to sticker 5, and corners[2] goes to sticker 4
@@ -59,7 +59,7 @@ static const int corner_swaps[][3] =
     [23] = {23, 22, 21}
 };
 
-static const char *edge_LUT[][2] = 
+const char *edge_LUT[][2] = 
 {
     [0] = {"R2 U' R2",                  "R2 U R2"                   },
     [1] = {"R2 U' L2 R2 D U' F U L'",   "L U' F' U D' R2 L2 U R2"   },
@@ -85,7 +85,7 @@ static const char *edge_LUT[][2] =
     [23] = {"D U' F U L'",              "L U' F' U D'"              }
 };
 
-static const int edge_swaps[][2] =
+const int edge_swaps[][2] =
 {
     [0] = {0, 1},
     [1] = {1, 0},
@@ -111,28 +111,15 @@ static const int edge_swaps[][2] =
     [23] = {23, 22}
 };
 
-static const char solved_edge_definition[]   = "WBWRWGWOBOGOGRBRYGYRYBYO";
-static const char solved_corner_definition[] = "WOBWRBWRGWOGYOGYRGYRBYOB"; 
+char solved_edge_definition[]   = "WBWRWGWOBOGOGRBRYGYRYBYO";
+char solved_corner_definition[] = "WOBWRBWRGWOGYOGYRGYRBYOB"; 
 
-bool is_solved_corners()
+bool is_solved(char* component, char* solved_array)
 {
     // checks if any sticker doesn't match a solved cube
     for (int i = 0; i < 24; i++)
     {
-        if (corners[i] != solved_corner_definition[i])
-        {
-            return false;
-        } 
-    }
-    return true;
-}
-
-bool is_solved_edges()
-{
-    // checks if any sticker doesn't match a solved cube
-    for (int i = 0; i < 24; i++)
-    {
-        if (edges[i] != solved_edge_definition[i])
+        if (component[i] != solved_array[i])
         {
             return false;
         } 
@@ -192,12 +179,12 @@ void solve_cube(char* cornerstate, char* edgestate)
     memcpy(edges, edgestate, 24);
     int number_swaps = 0;
 
-    while (is_solved_corners() == false)
+    while (is_solved(corners, solved_corner_definition) == false)
     {
         solve_corner(corners);
         number_swaps++;
     }
-    printf("\n");
+    //printf("\n");
 
     // if did uneven number of swaps, two edges will have been switched 
     if (number_swaps % 2 != 0)
@@ -206,12 +193,12 @@ void solve_cube(char* cornerstate, char* edgestate)
         _swap(edges, 1, 7);
     }
     
-    while (is_solved_edges() == false)
+    while (is_solved(edges, solved_edge_definition) == false)
     {
         solve_edge(edges);
     }
 
-    printf("\n [*] SOLVED\n");
+    //printf("\n [*] SOLVED\n");
 }
 
 void solve_corner(char* cornerstate)
@@ -233,7 +220,7 @@ void solve_corner(char* cornerstate)
 
     // update corners based on the desired swap 
     update_corners(cornerstate, target);
-    printf("%s {y perm} %s\n", corner_LUT[target][0], corner_LUT[target][1]);
+    //printf("%s {y perm} %s\n", corner_LUT[target][0], corner_LUT[target][1]);
 }
 
 void solve_edge(char* edgestate)
@@ -254,7 +241,7 @@ void solve_edge(char* edgestate)
     }
     // update edges based on the desired swap 
     update_edges(edgestate, target);
-    printf("%s {t perm} %s\n", edge_LUT[target][0], edge_LUT[target][1]);
+    //printf("%s {t perm} %s\n", edge_LUT[target][0], edge_LUT[target][1]);
 }
 
 static void _swap(char* str, int i, int j)
