@@ -39,7 +39,7 @@ int _solve_every_2x2_from_file_and_report_speed()
 		}
 	}
 
-	printf("\n\nRead %i lines\n", num_lines);
+	printf("\n\nRead %i lines.\nSolving in progress...\n", num_lines);
 
 
 	struct timeval stop, start;
@@ -52,7 +52,8 @@ int _solve_every_2x2_from_file_and_report_speed()
 	}
 
 	gettimeofday(&stop, NULL);
-	printf("took %lu us to solve %i cubes \n", (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec, num_lines); 
+	unsigned int time = (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec;
+	printf("took %u us to solve %i cubes (%u cubes per second) \n", time, num_lines, num_lines / (time / 1000000)); 
 	
 	mu_end();
 }
@@ -107,7 +108,7 @@ int _hamilton_to_cubestate_txt()
 		{
 			move = hamilton_to_calc[c];
 			calc(solved_corners, &move, 1);
-			printf("state #%i = %s\r", count++, solved_corners);
+			printf("Generating cubestate #%i = %s\r", count++, solved_corners);
 			fprintf(txt, "%s\n", solved_corners);
 		}
     }
