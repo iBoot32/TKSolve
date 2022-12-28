@@ -184,7 +184,7 @@ void solve_cube(char* cornerstate, char* edgestate)
         solve_corner(corners);
         number_swaps++;
     }
-    //printf("\n");
+    printf("\n");
 
     // if did uneven number of swaps, two edges will have been switched 
     if (number_swaps % 2 != 0)
@@ -198,7 +198,7 @@ void solve_cube(char* cornerstate, char* edgestate)
         solve_edge(edges);
     }
 
-    //printf("\n [*] SOLVED\n");
+    printf("\n [*] SOLVED\n");
 }
 
 void solve_corner(char* cornerstate)
@@ -220,7 +220,7 @@ void solve_corner(char* cornerstate)
 
     // update corners based on the desired swap 
     update_corners(cornerstate, target);
-    //printf("%s {y perm} %s\n", corner_LUT[target][0], corner_LUT[target][1]);
+    printf("%s {y perm} %s\n", corner_LUT[target][0], corner_LUT[target][1]);
 }
 
 void solve_edge(char* edgestate)
@@ -241,7 +241,7 @@ void solve_edge(char* edgestate)
     }
     // update edges based on the desired swap 
     update_edges(edgestate, target);
-    //printf("%s {t perm} %s\n", edge_LUT[target][0], edge_LUT[target][1]);
+    printf("%s {t perm} %s\n", edge_LUT[target][0], edge_LUT[target][1]);
 }
 
 static void _swap(char* str, int i, int j)
